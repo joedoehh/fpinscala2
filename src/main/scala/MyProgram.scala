@@ -1,19 +1,22 @@
+import scala.annotation.tailrec
 // A comment!
 /* Another comment */
 /** A documentation comment */
 object MyProgram:
-  def abs(n: Int): Int =
+  private def abs(n: Int): Int =
     if n < 0 then -n
     else n
 
-  def factorial(n: Int): Int =
+  private def factorial(n: Int): Int =
+    @tailrec
     def go(n: Int, acc: Int): Int =
       if n <= 0 then acc
       else go(n - 1, n * acc)
 
     go(n, 1)
 
-  def fib(n: Int): Int =
+  private def fib(n: Int): Int =
+    @tailrec
     def go(n: Int, current: Int, next: Int): Int =
       if n <= 0 then current
       else go(n - 1, next, current + next)
@@ -27,7 +30,7 @@ object MyProgram:
       else loop(n + 1)
     loop(0)
 
-  def curry[A, B, C](f: (A, B) => C): A => (B => C) =
+  def curry[A, B, C](f: (A, B) => C): A => B => C =
     a => b => f(a,b)
 
   private def formatFib(x: Int) =
@@ -42,7 +45,7 @@ object MyProgram:
     val msg = "Factorial value of %d is %d"
     msg.format(x, factorial(x))
 
-  @main def printAbs: Unit =
+  @main def printAbs(): Unit =
     println(formatAbs(-42))
     println(formatFac(3))
     println(formatFib(0))
