@@ -33,6 +33,12 @@ object MyProgram:
   def curry[A, B, C](f: (A, B) => C): A => B => C =
     a => b => f(a,b)
 
+  def uncurry[A, B, C](f: A => B => C): (A, B) => C =
+    (a,b) => f(a)(b)
+
+  def compose[A, B, C](f: B => C, g: A => B): A => C =
+    a => f(g(a))
+
   private def formatFib(x: Int) =
     val msg = "Fibonacci of of %d is %d"
     msg.format(x, fib(x))
@@ -45,7 +51,16 @@ object MyProgram:
     val msg = "Factorial value of %d is %d"
     msg.format(x, factorial(x))
 
-  @main def printAbs(): Unit =
+  def findFirst[A](as: Array[A], p: A => Boolean): Int =
+    @annotation.tailrec
+    def loop(n: Int): Int =
+      if n >= as.length then -1
+      else if p(as(n)) then n
+      else loop(n + 1)
+    loop(0)
+
+  @main
+  def printSomething(): Unit =
     println(formatAbs(-42))
     println(formatFac(3))
     println(formatFib(0))
