@@ -1,3 +1,5 @@
+package fpinscala.datastructures.ch2
+
 import scala.annotation.tailrec
 // A comment!
 /* Another comment */
