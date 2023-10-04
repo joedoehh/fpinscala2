@@ -40,3 +40,9 @@ object List:
     as match
       case Cons(x, xs) if f(x) => dropWhile(xs, f)
       case _ => as
+
+  def init[A](as: List[A]): List[A] =
+    as match
+      case Nil => sys.error("init of empty list")
+      case Cons(_, Nil) => Nil
+      case Cons(x, xs) => Cons(x, init(xs))
