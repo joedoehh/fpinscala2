@@ -46,3 +46,26 @@ object List:
       case Nil => sys.error("init of empty list")
       case Cons(_, Nil) => Nil
       case Cons(x, xs) => Cons(x, init(xs))
+
+  def foldRight[A, B](as: List[A], acc: B, f: (A, B) => B): B =
+    as match
+      case Nil => acc
+      case Cons(x, xs) => f(x, foldRight(xs, acc, f))
+
+  def sumViaFoldRight(ns: List[Int]) =
+    foldRight(ns, 0, (x,y) => x + y)
+
+  def productViaFoldRight(ns: List[Double]) =
+    foldRight(ns, 1.0, _ * _)
+
+  def length[A](as: List[A]): Int =
+    foldRight(as, 0, (x, y) => 1 + y)
+
+  @tailrec
+  def foldLeft[A, B](as: List[A], acc: B, f: (B, A) => B): B =
+    as match
+      case Nil => acc
+      case Cons(hd, tl) => foldLeft(tl, f(acc, hd), f)
+
+  def sumViaFoldLeft(ns: List[Int]) =
+    foldLeft(ns, 0, _ + _)
