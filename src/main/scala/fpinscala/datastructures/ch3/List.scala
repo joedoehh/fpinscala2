@@ -88,5 +88,37 @@ object List:
   def appendFL[A](xs: List[A], ys: List[A]): List[A] =
     foldLeft(ys, xs, (x, y) => Cons(y, x))
 
+  def appendEnd[A](xs: List[A], x: A): List[A] =
+    foldRight(xs, Nil: List[A], (next, acc) => Cons(next, acc))
+
   def concatenate[A](l: List[List[A]]): List[A] =
     foldRight(l, Nil: List[A], appendFR)
+
+  // 3.3.3 More functions for working with lists
+
+  def incrementEach(l: List[Int]): List[Int] =
+    foldRight(l, Nil: List[Int], (i,acc) => Cons(i+1, acc))
+
+  def doubleToStringEach(l: List[Double]): List[String] =
+    foldRight(l, Nil: List[String], (d, acc) => Cons(d.toString, acc))
+
+  def doubleToStringEachFL(l: List[Double]): List[String] =
+    foldLeft(l, Nil: List[String], (acc, d) => appendEnd(acc, d.toString))
+
+  def map[A, B](as: List[A], f: A => B): List[B] =
+    foldRight(as, Nil: List[B], (a, acc) => Cons(f(a), acc))
+
+  def filter[A](as: List[A], f: A => Boolean): List[A] =
+    foldRight(as, Nil: List[A],
+      (a, acc) =>
+        if f(a) then Cons(a, acc) else acc)
+
+  def filterOdd(xs: List[Int]): List[Int] =
+    filter(xs, _ % 2 != 0)
+
+  def flatMap[A, B](as: List[A], f: A => List[B]): List[B] =
+    foldRight(as, Nil: List[B], (a, acc) => appendFR(f(a), acc))
+
+  def filterFM[A](as: List[A], f: A => Boolean): List[A] =
+    flatMap(as, a => if f(a) then List(a) else Nil)
+
