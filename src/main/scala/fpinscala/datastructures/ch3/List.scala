@@ -52,10 +52,10 @@ object List:
       case Nil => acc
       case Cons(x, xs) => f(x, foldRight(xs, acc, f))
 
-  def sumViaFoldRight(ns: List[Int]) =
+  def sumViaFoldRight(ns: List[Int]): Any =
     foldRight(ns, 0, (x,y) => x + y)
 
-  def productViaFoldRight(ns: List[Double]) =
+  def productViaFoldRight(ns: List[Double]): Any =
     foldRight(ns, 1.0, _ * _)
 
   def length[A](as: List[A]): Int =
@@ -67,5 +67,26 @@ object List:
       case Nil => acc
       case Cons(hd, tl) => foldLeft(tl, f(acc, hd), f)
 
-  def sumViaFoldLeft(ns: List[Int]) =
+  def sumFL(ns: List[Int]): Any =
     foldLeft(ns, 0, _ + _)
+
+  def productFL(ns: List[Int]): Any =
+    foldLeft(ns, 1, _ * _)
+
+  def lengthFL(ns: List[Int]): Any =
+    foldLeft(ns, 0, (x,y) => x + 1)
+
+  def foldRightViaFL[A, B](as: List[A], acc: B, f: (A, B) => B): B =
+    foldLeft(as, (b: B) => b, (g, a) => b => g(f(a, b)))(acc)
+
+  def foldLeftViaFR[A, B](as: List[A], acc: B, f: (B, A) => B): B =
+    foldRight(as, (b: B) => b, (a, g) => b => g(f(b, a)))(acc)
+
+  def appendFR[A](xs: List[A], ys: List[A]): List[A] =
+    foldRight(xs, ys, (x,y) => Cons(x, y))
+
+  def appendFL[A](xs: List[A], ys: List[A]): List[A] =
+    foldLeft(ys, xs, (x, y) => Cons(y, x))
+
+  def concatenate[A](l: List[List[A]]): List[A] =
+    foldRight(l, Nil: List[A], appendFR)
